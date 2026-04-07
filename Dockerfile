@@ -17,7 +17,9 @@ RUN npm run build
 # Producción
 FROM node:20-alpine AS runner
 # El entorno de ejecución sigue requiriendo FFmpeg y Python para procesar
-RUN apk add --no-cache ffmpeg python3
+RUN apk add --no-cache ffmpeg python3 wget
+RUN wget -O /usr/local/bin/yt-dlp https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp \
+    && chmod a+rx /usr/local/bin/yt-dlp
 WORKDIR /app
 
 ENV NODE_ENV production

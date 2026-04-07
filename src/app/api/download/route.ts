@@ -3,14 +3,17 @@ import { create } from 'youtube-dl-exec';
 import path from 'path';
 import os from 'os';
 
-// Resolve boundary path issues dynamically to avoid Webpack/Next.js aliasing it to \ROOT\
-const binaryPath = path.join(
-  process.cwd(),
-  'node_modules',
-  'youtube-dl-exec',
-  'bin',
-  os.platform() === 'win32' ? 'yt-dlp.exe' : 'yt-dlp'
-);
+// En producción Docker, usamos el binario global directo (más estable en contenedores Alpine)
+const isProd = process.env.NODE_ENV === 'production';
+const binaryPath = isProd 
+  ? '/usr/local/bin/yt-dlp' 
+  : path.join(
+      process.cwd(),
+      'node_modules',
+      'youtube-dl-exec',
+      'bin',
+      os.platform() === 'win32' ? 'yt-dlp.exe' : 'yt-dlp'
+    );
 
 const youtubedl = create(binaryPath);
 
