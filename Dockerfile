@@ -6,6 +6,7 @@ WORKDIR /app
 
 # Install dependencies
 COPY package.json package-lock.json* ./
+ENV YOUTUBE_DL_SKIP_DOWNLOAD=true
 RUN npm ci
 
 # Copiamos código y construimos la imagen standalone de NextJS
